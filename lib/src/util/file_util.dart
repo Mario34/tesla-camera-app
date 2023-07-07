@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:tesla_camera/src/util/constants.dart';
 import 'package:tesla_camera/src/util/video_direction.dart';
@@ -31,12 +32,16 @@ class FileUtil {
     }
     List<FileSystemEntity> files = root.listSync();
     for (var f in files) {
+      if (f is! Directory) {
+        debugPrint('$f is not directory.');
+        continue;
+      }
       final entity = VideoEntity(
         type: type,
         name: FileUtil.getNameByPath(f.path),
       );
       results.add(entity);
-      List<FileSystemEntity> videos = (f as Directory).listSync();
+      List<FileSystemEntity> videos = f.listSync();
       for (var v in videos) {
         if (v.path.contains(VideoDirection.front.direction)) {
           entity.front = v.path;
