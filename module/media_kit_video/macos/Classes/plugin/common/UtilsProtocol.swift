@@ -1,1 +1,4 @@
-../../../../common/darwin/Classes/plugin/UtilsProtocol.swift
+public protocol UtilsProtocol: NSObject {
+  func enterNativeFullscreen()
+  func exitNativeFullscreen()
+}
