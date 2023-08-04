@@ -33,16 +33,19 @@ dependencies:
   todo_flutter:
     git:
       url: https://github.com/azhon/todo-flutter.git
-      ref: flutter-3.7.5
   file_selector: ^0.9.5
   audio_video_progress_bar: ^1.0.1
   path_provider: ^2.0.15
   process_run: ^0.13.0
 
-  media_kit: ^1.0.2
-  media_kit_video: ^1.0.2
-  media_kit_libs_macos_video: ^1.0.5
-  media_kit_libs_windows_video: ^1.0.2
+  media_kit:
+    path: ./module/media_kit
+  media_kit_video:
+    path: ./module/media_kit_video
+  media_kit_libs_macos_video:
+    path: ./module/media_kit_libs_macos_video
+  media_kit_libs_windows_video:
+    path: ./module/media_kit_libs_windows_video
 
   cupertino_icons: ^1.0.2
 
