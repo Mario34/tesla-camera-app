@@ -25,13 +25,13 @@ abstract class BaseFfmpeg {
 
   ///返回字体路径
   Future<String> ttf() async {
-    return File('${await path()}/$ttfName').path;
+    return File('${await path()}${Platform.pathSeparator}$ttfName').path;
   }
 
   ///拷贝字体文件
   Future<void> createTtf() async {
     final dir = await path();
-    final file = File('$dir/$ttfName');
+    final file = File('$dir${Platform.pathSeparator}$ttfName');
     if (file.existsSync()) {
       debugPrint('$ttfName is already exists.');
       return;

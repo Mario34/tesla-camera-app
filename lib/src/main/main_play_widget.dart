@@ -3,6 +3,7 @@
 ///
 /// @author azhon
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -467,7 +468,11 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     ];
     _togglePlay(pause: true);
     _showLoadingDialog();
-    final shell = Shell(workingDirectory: await ffmpeg.path());
+    final shell = Shell(
+      stderrEncoding: const Utf8Codec(),
+      stdoutEncoding: const Utf8Codec(),
+      workingDirectory: await ffmpeg.path(),
+    );
     debugPrint('----start---\n${command.join(' ')}\n----end---');
     shell.run(command.join(' ')).then((value) {
       Navigator.of(context).pop();
