@@ -9,7 +9,8 @@ import 'dart:ui';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_meedu_videoplayer/meedu_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:process_run/process_run.dart';
 import 'package:tesla_camera/generated/assets/tesla_camera_assets.dart';
 import 'package:tesla_camera/src/bloc/video/video_bloc.dart';
@@ -46,7 +47,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   VideoEntity? _currentVideo;
 
   ///5个播放控制器
-  late MeeduPlayerController _frontController,
+  late VideoController _frontController,
       _backController,
       _leftController,
       _rightController;
@@ -65,12 +66,8 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   }
 
   ///创建播放器
-  MeeduPlayerController _createController() {
-    return MeeduPlayerController(
-      colorTheme: Colors.blue,
-      controlsEnabled: false,
-      controlsStyle: ControlsStyle.primary,
-    );
+  VideoController _createController() {
+    return VideoController(Player()..setPlaylistMode(PlaylistMode.loop));
   }
 
   ///监听视频切换
@@ -87,33 +84,26 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   }
 
   ///监听播放进度
-  void _listenerProgress(MeeduPlayerController controller) {
-    _totalDurationBloc.changeData(controller.duration.value);
+  void _listenerProgress(VideoController controller) {
     _durationBloc.changeData(Duration.zero);
 
     _statusSubscription?.cancel();
     _totalDurationSubscription?.cancel();
     _progressDurationSubscription?.cancel();
 
-    _totalDurationSubscription = controller.onDurationChanged.listen((event) {
+    _totalDurationSubscription =
+        controller.player.stream.duration.listen((event) {
       _totalDurationBloc.changeData(event);
     });
     _progressDurationSubscription =
-        controller.onPositionChanged.listen((event) {
+        controller.player.stream.position.listen((event) {
       _durationBloc.changeData(event);
     });
   }
 
   ///设置视频数据
-  Future<void> _setDataSource(MeeduPlayerController controller, String? path) {
-    return controller.setDataSource(
-      DataSource(
-        type: DataSourceType.file,
-        file: File(path ?? ''),
-      ),
-      autoplay: true,
-      looping: true,
-    );
+  Future<void> _setDataSource(VideoController controller, String? path) {
+    return controller.player.open(Media(path!));
   }
 
   @override
@@ -133,8 +123,9 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
                           onTap: () => _togglePlay(),
                           child: AspectRatio(
                             aspectRatio: 4 / 3,
-                            child: MeeduVideoPlayer(
+                            child: Video(
                               controller: _getMainController(),
+                              controls: null,
                             ),
                           ),
                         ),
@@ -177,18 +168,18 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
 
   void _togglePlay({bool pause = false}) async {
     if (pause) {
-      await _frontController.pause();
-      await _backController.pause();
-      await _leftController.pause();
-      await _rightController.pause();
+      await _frontController.player.pause();
+      await _backController.player.pause();
+      await _leftController.player.pause();
+      await _rightController.player.pause();
       _statusBloc.changeData(false);
       return;
     }
-    _statusBloc.changeData(!_getMainController().playerStatus.playing);
-    await _frontController.togglePlay();
-    await _backController.togglePlay();
-    await _leftController.togglePlay();
-    await _rightController.togglePlay();
+    _statusBloc.changeData(!_getMainController().player.state.playing);
+    await _frontController.player.playOrPause();
+    await _backController.player.playOrPause();
+    await _leftController.player.playOrPause();
+    await _rightController.player.playOrPause();
   }
 
   Widget _topBarWidget() {
@@ -238,7 +229,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   bool get hasVideo => _currentVideo != null;
 
   ///获取当前主视图显示的视角
-  MeeduPlayerController _getMainController() {
+  VideoController _getMainController() {
     switch (_direction) {
       case VideoDirection.front:
         return _frontController;
@@ -267,7 +258,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
 
   ///创建播放视图
   Widget _createPlayer(
-    MeeduPlayerController controller, {
+    VideoController controller, {
     required VideoDirection direction,
     double? left,
     double? top,
@@ -298,8 +289,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   }
 
   ///创建四个小窗播放视图
-  Widget _smallVideo(
-      VideoDirection direction, MeeduPlayerController controller) {
+  Widget _smallVideo(VideoDirection direction, VideoController controller) {
     return Stack(
       children: [
         _getMainController() == controller
@@ -316,8 +306,9 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
               )
             : AspectRatio(
                 aspectRatio: 4 / 3,
-                child: MeeduVideoPlayer(
+                child: Video(
                   controller: controller,
+                  controls: null,
                 ),
               ),
         Positioned(
@@ -364,10 +355,10 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
 
   ///改变进度
   void _changeProgress(Duration duration) {
-    _frontController.seekTo(duration);
-    _backController.seekTo(duration);
-    _leftController.seekTo(duration);
-    _rightController.seekTo(duration);
+    _frontController.player.seek(duration);
+    _backController.player.seek(duration);
+    _leftController.player.seek(duration);
+    _rightController.player.seek(duration);
   }
 
   Widget _timestampWidget() {
@@ -543,10 +534,10 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     _statusSubscription?.cancel();
     _totalDurationSubscription?.cancel();
     _progressDurationSubscription?.cancel();
-    _frontController.dispose();
-    _backController.dispose();
-    _leftController.dispose();
-    _rightController.dispose();
+    _frontController.player.dispose();
+    _backController.player.dispose();
+    _leftController.player.dispose();
+    _rightController.player.dispose();
     _totalDurationBloc.close();
     _durationBloc.close();
     _statusBloc.close();
