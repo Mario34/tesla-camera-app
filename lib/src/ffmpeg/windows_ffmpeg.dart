@@ -27,4 +27,12 @@ class WindowsFfmpeg extends BaseFfmpeg {
 
     debugPrint('copy $ffmpegName success: $dir');
   }
+
+  /// windows 关于字体路径需要特殊处理
+  @override
+  Future<String> ttf() async {
+    String path = await super.ttf();
+    String removeDiskName = path.split(':')[1];
+    return removeDiskName.replaceAll('\\', '/');
+  }
 }
