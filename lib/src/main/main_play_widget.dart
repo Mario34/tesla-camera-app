@@ -88,7 +88,6 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
 
   ///监听播放进度
   void _listenerProgress(MeeduPlayerController controller) {
-    _statusBloc.changeData(true);
     _totalDurationBloc.changeData(controller.duration.value);
     _durationBloc.changeData(Duration.zero);
 
@@ -102,9 +101,6 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     _progressDurationSubscription =
         controller.onPositionChanged.listen((event) {
       _durationBloc.changeData(event);
-    });
-    _statusSubscription = controller.onPlayerStatusChanged.listen((event) {
-      _statusBloc.changeData(event == PlayerStatus.playing);
     });
   }
 
@@ -185,8 +181,10 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
       await _backController.pause();
       await _leftController.pause();
       await _rightController.pause();
+      _statusBloc.changeData(false);
       return;
     }
+    _statusBloc.changeData(!_getMainController().playerStatus.playing);
     await _frontController.togglePlay();
     await _backController.togglePlay();
     await _leftController.togglePlay();
@@ -404,7 +402,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
             ? const SizedBox()
             : const Center(
                 child: Icon(
-                  Icons.pause_circle_outline,
+                  Icons.play_circle_outlined,
                   color: Colors.white,
                   size: 60,
                 ),
