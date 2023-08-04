@@ -34,9 +34,9 @@ dependencies:
     git:
       url: https://github.com/azhon/todo-flutter.git
       ref: flutter-3.7.5
-  file_selector: ^0.9.5
+  file_selector: ^1.0.0
   audio_video_progress_bar: ^1.0.1
-  flutter_meedu_videoplayer: ^4.2.13
+  flutter_meedu_videoplayer: ^4.2.21
   path_provider: ^2.0.15
   process_run: ^0.13.0
   # The following adds the Cupertino Icons font to your application.
