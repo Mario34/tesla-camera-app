@@ -1,16 +1,26 @@
-# tesla_camera
+## Tesla Camera
 
-Tesla Camera
+### Flutter doctor
 
-## Getting Started
+- Mac OS
 
-This project is a starting point for a Flutter application.
+```shell
+[✓] Flutter (Channel stable, 3.10.5, on macOS 12.5 21G72 darwin-x64, locale zh-Hans-CN)
+[✓] Android toolchain - develop for Android devices (Android SDK version 33.0.0)
+[✓] Xcode - develop for iOS and macOS (Xcode 14.1)
+[✓] Chrome - develop for the web
+[✓] Android Studio (version 2022.1)
+[✓] IntelliJ IDEA Ultimate Edition (version 2023.1)
+[✓] VS Code (version 1.73.1)
+[✓] Connected device (2 available)
+```
+- Windows
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```shell
+[√] Flutter (Channel stable, 3.10.5, on Microsoft Windows [版本 10.0.22621.1992], locale zh-CN)
+[√] Windows Version (Installed version of Windows is version 10 or higher)
+[√] Chrome - develop for the web
+[√] Visual Studio - develop for Windows (Visual Studio Community 2022 17.6.4)
+[√] Android Studio (version 2022.2)
+[√] Connected device (3 available)
+```
