@@ -471,10 +471,14 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     debugPrint('----start---\n${command.join(' ')}\n----end---');
     shell.run(command.join(' ')).then((value) {
       Navigator.of(context).pop();
-      _showSuccessDialog(output.path);
+      _showDoneDialog(output.path, true);
+    }).catchError((error) {
+      Navigator.of(context).pop();
+      _showDoneDialog(error.toString(), false);
     });
   }
 
+  ///导出中对话框
   void _showLoadingDialog() {
     showDialog(
       context: context,
@@ -507,14 +511,15 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     );
   }
 
-  void _showSuccessDialog(String path) {
+  ///完成对话框
+  void _showDoneDialog(String msg, bool success) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: const Text('导出成功'),
-          content: Text('文件位于：$path'),
+          title: Text("导出${success ? '成功' : '失败'}"),
+          content: Text(success ? '文件位于：$msg' : msg),
           actions: [
             TextButton(
               child: const Text('确定'),
