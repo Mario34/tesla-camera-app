@@ -12,13 +12,13 @@ class WindowsFfmpeg extends BaseFfmpeg {
 
   @override
   String ffmpeg() {
-    return ffmpegName;
+    return ".\\$ffmpegName";
   }
 
   @override
   Future<void> createFfmpeg() async {
     final dir = await path();
-    final file = File('$dir/$ffmpegName');
+    final file = File('$dir${Platform.pathSeparator}$ffmpegName');
     if (file.existsSync()) {
       debugPrint('$ffmpegName is already exists.');
       return;

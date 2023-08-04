@@ -19,7 +19,7 @@ class MacosFfmpeg extends BaseFfmpeg {
   @override
   Future<void> createFfmpeg() async {
     final dir = await path();
-    final file = File('$dir/$ffmpegName');
+    final file = File('$dir${Platform.pathSeparator}$ffmpegName');
     if (file.existsSync()) {
       debugPrint('$ffmpegName is already exists.');
       return;

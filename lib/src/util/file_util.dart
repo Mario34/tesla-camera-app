@@ -26,7 +26,7 @@ class FileUtil {
   static Future<List<VideoEntity>> _getFiles(
       String path, VideoType type) async {
     List<VideoEntity> results = [];
-    final root = Directory('$path/${type.name}');
+    final root = Directory('$path${Platform.pathSeparator}${type.name}');
     if (!await root.exists()) {
       return results;
     }
@@ -63,6 +63,6 @@ class FileUtil {
   }
 
   static String getNameByPath(String path) {
-    return path.substring(path.lastIndexOf('/') + 1);
+    return path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
   }
 }
