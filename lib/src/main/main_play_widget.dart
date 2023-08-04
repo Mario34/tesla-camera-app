@@ -468,6 +468,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     _togglePlay(pause: true);
     _showLoadingDialog();
     final shell = Shell(workingDirectory: await ffmpeg.path());
+    debugPrint('----start---\n${command.join(' ')}\n----end---');
     shell.run(command.join(' ')).then((value) {
       Navigator.of(context).pop();
       _showSuccessDialog(output.path);
@@ -489,9 +490,9 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
               color: Colors.black.withOpacity(0.7),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 CircularProgressIndicator(color: Colors.white),
                 SizedBox(height: 20),
                 Text(

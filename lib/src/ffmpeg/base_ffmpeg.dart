@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tesla_camera/src/ffmpeg/macos_ffmpeg.dart';
+import 'package:tesla_camera/src/ffmpeg/windows_ffmpeg.dart';
 
 /// createTime: 2023/7/7 on 10:54
 /// desc:
@@ -19,12 +21,24 @@ abstract class BaseFfmpeg {
   ///创建ffmpeg
   Future<void> createFfmpeg();
 
-  ///创建字体
-  Future<void> createTtf();
-
   String ffmpeg();
 
-  Future<String> ttf();
+  ///返回字体路径
+  Future<String> ttf() async {
+    return File('${await path()}/$ttfName').path;
+  }
+
+  ///拷贝字体文件
+  Future<void> createTtf() async {
+    final dir = await path();
+    final file = File('$dir/$ttfName');
+    if (file.existsSync()) {
+      debugPrint('$ttfName is already exists.');
+      return;
+    }
+    await writeFile(file, 'assets/$ttfName');
+    debugPrint('copy $ttfName success: $dir');
+  }
 
   Future<String> path() async {
     final dir = await getApplicationSupportDirectory();
@@ -55,6 +69,8 @@ class Ffmpeg {
   Ffmpeg._internal() {
     if (Platform.isMacOS) {
       ffmpeg = MacosFfmpeg();
+    } else if (Platform.isWindows) {
+      ffmpeg = WindowsFfmpeg();
     }
   }
 }
