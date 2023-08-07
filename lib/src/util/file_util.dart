@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:tesla_camera/src/util/constants.dart';
 import 'package:tesla_camera/src/util/video_direction.dart';
 import 'package:tesla_camera/src/util/video_type.dart';
+import 'package:intl/intl.dart';
 
 /// createTime: 2023/7/4 on 15:41
 /// desc:
@@ -19,8 +18,8 @@ class FileUtil {
     all.addAll(await _getFiles(root, VideoType.sentinel));
     all.addAll(await _getFiles(root, VideoType.record));
     all.sort((a, b) {
-      return (b.event?.timestamp?.millisecondsSinceEpoch ?? 0)
-          .compareTo(a.event?.timestamp?.millisecondsSinceEpoch ?? 0);
+      return b.time.millisecondsSinceEpoch
+          .compareTo(a.time.millisecondsSinceEpoch);
     });
     return all;
   }
@@ -34,36 +33,44 @@ class FileUtil {
     if (!await root.exists()) {
       return results;
     }
+    Map<String, VideoEntity> videos = {};
+    getAllVideos(type, videos, root);
+    return videos.values.toList();
+  }
+
+  ///递归遍历所有视频
+  static void getAllVideos(
+    VideoType type,
+    Map<String, VideoEntity> videos,
+    Directory root,
+  ) {
     List<FileSystemEntity> files = root.listSync();
     for (var f in files) {
-      if (f is! Directory) {
-        debugPrint('$f is not directory.');
-        continue;
-      }
-      final entity = VideoEntity(
-        type: type,
-        name: FileUtil.getNameByPath(f.path),
-      );
-      results.add(entity);
-      List<FileSystemEntity> videos = f.listSync();
-      for (var v in videos) {
-        if (v.path.contains(VideoDirection.front.direction)) {
-          entity.front = v.path;
-        } else if (v.path.contains(VideoDirection.back.direction)) {
-          entity.back = v.path;
-        } else if (v.path.contains(VideoDirection.left.direction)) {
-          entity.left = v.path;
-        } else if (v.path.contains(VideoDirection.right.direction)) {
-          entity.right = v.path;
-        } else if (v.path.contains(Constants.thumb)) {
-          entity.thumb = v.path;
-        } else if (v.path.contains(Constants.eventJson)) {
-          final json = await File(v.path).readAsString();
-          entity.event = Event.fromJson(jsonDecode(json));
+      if (f is Directory) {
+        getAllVideos(type, videos, f);
+      } else {
+        String fileName = getNameByPath(f.path);
+        if (fileName.contains(Constants.eventJson) ||
+            fileName.contains(Constants.thumb)) {
+          continue;
+        }
+        String date = fileName.substring(0, fileName.lastIndexOf('-'));
+        String direction = fileName.substring(fileName.lastIndexOf('-'));
+
+        DateTime time = DateFormat('yyyy-MM-dd_HH-mm-ss').parse(date);
+        videos[date] = videos[date] ?? VideoEntity(type: type, time: time);
+
+        if (direction.contains(VideoDirection.front.direction)) {
+          videos[date]!.front = f.path;
+        } else if (direction.contains(VideoDirection.back.direction)) {
+          videos[date]!.back = f.path;
+        } else if (direction.contains(VideoDirection.left.direction)) {
+          videos[date]!.left = f.path;
+        } else if (direction.contains(VideoDirection.right.direction)) {
+          videos[date]!.right = f.path;
         }
       }
     }
-    return results;
   }
 
   static String getNameByPath(String path) {

@@ -2,8 +2,6 @@
 /// desc:
 ///
 /// @author azhon
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:tesla_camera/src/bloc/tab/tab_bloc.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
@@ -137,46 +135,18 @@ class _MainTabWidgetState extends State<MainTabWidget>
                     Icons.radio_button_unchecked,
                     color: Colors.grey,
                   ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Image.file(
-                File(item.thumb ?? ''),
-                width: 120,
-              ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      TimeUtil.formatTime(
-                          item.event?.timestamp?.millisecondsSinceEpoch ?? 0,
-                          format: 'yyyy年MM月dd日'),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF333333),
-                      ),
-                    ),
-                    Text(
-                      TimeUtil.HHmmss(
-                          item.event?.timestamp?.millisecondsSinceEpoch ?? 0),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF333333),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      item.event?.city ?? '',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF666666),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  TimeUtil.formatTime(item.time.millisecondsSinceEpoch,
+                      format: 'yyyy年MM月dd日 HH:mm:ss'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color:
+                        item.selected ? Colors.blue : const Color(0xFF333333),
+                  ),
                 ),
               ),
             ),

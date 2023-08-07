@@ -4,7 +4,7 @@
 /// @author azhon
 class Constants {
   ///数据
-  static const eventJson = 'event.json';
+  static const eventJson = 'event';
 
   ///缩略图
   static const thumb = 'thumb';

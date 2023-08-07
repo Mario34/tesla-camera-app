@@ -363,7 +363,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   }
 
   Widget _timestampWidget() {
-    final start = _currentVideo?.event?.timestamp?.millisecondsSinceEpoch ?? 0;
+    final start = _currentVideo?.time.millisecondsSinceEpoch ?? 0;
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
@@ -455,8 +455,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     String fontColor = 'white';
 
     ///视频开始时间
-    int startTime =
-        (_currentVideo!.event?.timestamp?.millisecondsSinceEpoch ?? 0) ~/ 1000;
+    int startTime = _currentVideo!.time.millisecondsSinceEpoch ~/ 1000;
     final List<String> command = [
       ffmpeg.ffmpeg(),
       '-y',

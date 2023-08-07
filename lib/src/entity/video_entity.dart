@@ -8,8 +8,8 @@ class VideoEntity {
   ///类型[Constants]
   final VideoType type;
 
-  ///文件名称
-  String? name;
+  ///时间
+  DateTime time;
 
   ///前视
   String? front;
@@ -23,50 +23,15 @@ class VideoEntity {
   ///右视
   String? right;
 
-  ///缩略图
-  String? thumb;
-
-  ///数据
-  Event? event;
-
   bool selected;
 
   VideoEntity({
     required this.type,
-    this.name,
+    required this.time,
     this.front,
     this.back,
     this.left,
     this.right,
-    this.thumb,
-    this.event,
     this.selected = false,
   });
-}
-
-class Event {
-  DateTime? timestamp;
-  String? city;
-  String? estLat;
-  String? estLon;
-  String? reason;
-  String? camera;
-
-  Event({
-    this.timestamp,
-    this.city,
-    this.estLat,
-    this.estLon,
-    this.reason,
-    this.camera,
-  });
-
-  Event.fromJson(Map<String, dynamic> map) {
-    timestamp = DateTime.parse(map['timestamp'] ?? '');
-    city = map['city'];
-    estLat = map['est_lat'];
-    estLon = map['est_lon'];
-    reason = map['reason'];
-    camera = map['camera'];
-  }
 }
