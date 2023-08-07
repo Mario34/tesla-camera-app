@@ -7,10 +7,10 @@ enum VideoType {
   events('SavedClips'),
 
   ///哨兵
-  sentinel('Sentinel'),
+  sentinel('SentryClips'),
 
   ///记录仪
-  record('Record'),
+  record('RecentClips'),
   ;
 
   final String name;

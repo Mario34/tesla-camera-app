@@ -18,6 +18,10 @@ class FileUtil {
     all.addAll(await _getFiles(root, VideoType.events));
     all.addAll(await _getFiles(root, VideoType.sentinel));
     all.addAll(await _getFiles(root, VideoType.record));
+    all.sort((a, b) {
+      return (b.event?.timestamp?.millisecondsSinceEpoch ?? 0)
+          .compareTo(a.event?.timestamp?.millisecondsSinceEpoch ?? 0);
+    });
     return all;
   }
 
