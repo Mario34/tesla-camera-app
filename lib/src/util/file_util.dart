@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:tesla_camera/src/entity/video_entity.dart';
@@ -45,30 +46,47 @@ class FileUtil {
     Directory root,
   ) {
     List<FileSystemEntity> files = root.listSync();
+    DateTime? eventTime;
     for (var f in files) {
       if (f is Directory) {
         getAllVideos(type, videos, f);
       } else {
         String fileName = getNameByPath(f.path);
-        if (fileName.contains(Constants.eventJson) ||
-            fileName.contains(Constants.thumb)) {
+        if (fileName.contains(Constants.thumb)) {
           continue;
         }
+        if (fileName.contains(Constants.eventJson)) {
+          ///事件发生的时间
+          final json = File(f.path).readAsStringSync();
+          eventTime = DateTime.parse(jsonDecode(json)['timestamp']);
+          continue;
+        }
+
         String date = fileName.substring(0, fileName.lastIndexOf('-'));
         String direction = fileName.substring(fileName.lastIndexOf('-'));
 
         DateTime time = DateFormat('yyyy-MM-dd_HH-mm-ss').parse(date);
         videos[date] = videos[date] ?? VideoEntity(type: type, time: time);
 
+        VideoEntity curr = videos[date]!;
+
         if (direction.contains(VideoDirection.front.direction)) {
-          videos[date]!.front = f.path;
+          curr.front = f.path;
         } else if (direction.contains(VideoDirection.back.direction)) {
-          videos[date]!.back = f.path;
+          curr.back = f.path;
         } else if (direction.contains(VideoDirection.left.direction)) {
-          videos[date]!.left = f.path;
+          curr.left = f.path;
         } else if (direction.contains(VideoDirection.right.direction)) {
-          videos[date]!.right = f.path;
+          curr.right = f.path;
         }
+
+        ///判断是不是发生事件了
+        // if (eventTime != null) {
+        //   if (eventTime.isAtSameMomentAs(curr.time) ||
+        //       eventTime.isAfter(curr.time)) {
+        //     curr.event = true;
+        //   }
+        // }
       }
     }
   }

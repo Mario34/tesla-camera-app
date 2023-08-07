@@ -126,7 +126,6 @@ class _MainTabWidgetState extends State<MainTabWidget>
         ),
         child: Row(
           children: [
-            const SizedBox(width: 10),
             item.selected
                 ? const Icon(
                     Icons.radio_button_checked,
@@ -136,17 +135,27 @@ class _MainTabWidgetState extends State<MainTabWidget>
                     Icons.radio_button_unchecked,
                     color: Colors.grey,
                   ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  TimeUtil.formatTime(item.time.millisecondsSinceEpoch,
-                      format: 'yyyy年MM月dd日 HH:mm:ss'),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color:
-                        item.selected ? Colors.blue : const Color(0xFF333333),
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                TimeUtil.formatTime(item.time.millisecondsSinceEpoch,
+                    format: 'yyyy年MM月dd日 HH:mm:ss'),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: item.selected ? Colors.blue : const Color(0xFF333333),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Visibility(
+              visible: item.event,
+              child: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(100),
                 ),
               ),
             ),

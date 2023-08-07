@@ -23,6 +23,8 @@ class VideoEntity {
   ///右视
   String? right;
 
+  bool event;
+
   bool selected;
 
   VideoEntity({
@@ -32,6 +34,7 @@ class VideoEntity {
     this.back,
     this.left,
     this.right,
+    this.event = false,
     this.selected = false,
   });
 }
