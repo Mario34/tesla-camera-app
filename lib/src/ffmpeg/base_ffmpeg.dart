@@ -32,10 +32,7 @@ abstract class BaseFfmpeg {
   Future<void> createTtf() async {
     final dir = await path();
     final file = File('$dir${Platform.pathSeparator}$ttfName');
-    if (file.existsSync()) {
-      debugPrint('$ttfName is already exists.');
-      return;
-    }
+
     await writeFile(file, 'assets/$ttfName');
     debugPrint('copy $ttfName success: $dir');
   }
