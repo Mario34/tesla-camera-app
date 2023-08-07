@@ -126,6 +126,7 @@ class _MainTabWidgetState extends State<MainTabWidget>
         ),
         child: Row(
           children: [
+            const SizedBox(width: 10),
             item.selected
                 ? const Icon(
                     Icons.radio_button_checked,
@@ -143,7 +144,6 @@ class _MainTabWidgetState extends State<MainTabWidget>
                       format: 'yyyy年MM月dd日 HH:mm:ss'),
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
                     color:
                         item.selected ? Colors.blue : const Color(0xFF333333),
                   ),
