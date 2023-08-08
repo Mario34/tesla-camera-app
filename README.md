@@ -24,3 +24,11 @@
 [√] Android Studio (version 2022.2)
 [√] Connected device (3 available)
 ```
+
+### Package
+
+- Mac OS
+> Use `create-dmg`, script in `/shell/sh_dmg.sh`
+
+- Windows
+> Use `InnoSetup`, [doc link](https://juejin.cn/post/7108928269285589000). Script in `/shell/TeslaCam.iss`
