@@ -56,6 +56,9 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   ///当前视角
   VideoDirection _direction = VideoDirection.front;
 
+  ///导出视角
+  VideoDirection _exportDirection = VideoDirection.front;
+
   @override
   void initState() {
     super.initState();
@@ -188,39 +191,72 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
       padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFCCCCCC)),
-            ),
-            child: IconButton(
-              icon: Image.asset(
-                TeslaCameraAssets.dir,
-                fit: BoxFit.fitWidth,
-                width: 128,
-                height: 128,
-              ),
-              tooltip: '选择车载U盘中的TeslaCam目录，\n或者是TeslaCam文件目录的拷贝',
-              onPressed: () => _selectDir(),
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFCCCCCC)),
+                  ),
+                  child: IconButton(
+                    icon: Image.asset(
+                      TeslaCameraAssets.dir,
+                      fit: BoxFit.fitWidth,
+                      width: 128,
+                      height: 128,
+                    ),
+                    tooltip: '选择车载U盘中的TeslaCam目录，\n或者是TeslaCam文件目录的拷贝',
+                    onPressed: () => _selectDir(),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFCCCCCC)),
+                  ),
+                  child: IconButton(
+                    icon: Image.asset(
+                      TeslaCameraAssets.export,
+                      fit: BoxFit.fitWidth,
+                      width: 128,
+                      height: 128,
+                    ),
+                    tooltip: '选择保存位置并添\n加时间水印并导出',
+                    onPressed: () => _exportVideo(_getSelectVideoPath()),
+                  ),
+                ),
+              ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(left: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFCCCCCC)),
-            ),
-            child: IconButton(
-              icon: Image.asset(
-                TeslaCameraAssets.export,
-                fit: BoxFit.fitWidth,
-                width: 128,
-                height: 128,
+          Row(
+            children: [
+              const Text(
+                '导出视角',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF666666),
+                ),
               ),
-              tooltip: '选择保存位置并添\n加时间水印并导出',
-              onPressed: () => _exportVideo(_getMainVideoPath()),
-            ),
+              const SizedBox(width: 16),
+              DropdownButton<VideoDirection>(
+                value: _exportDirection,
+                items: VideoDirection.values
+                    .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e.name),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _exportDirection = value!;
+                  });
+                },
+              ),
+            ],
           ),
+          const SizedBox(width: 40),
         ],
       ),
     );
@@ -243,9 +279,9 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     }
   }
 
-  ///获取当前主视图的文件地址
-  String? _getMainVideoPath() {
-    switch (_direction) {
+  ///获取当前导出视角的文件地址
+  String? _getSelectVideoPath() {
+    switch (_exportDirection) {
       case VideoDirection.front:
         return _currentVideo?.front;
       case VideoDirection.back:
