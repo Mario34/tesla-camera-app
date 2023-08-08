@@ -1,4 +1,12 @@
-## Tesla Camera
+# Tesla Camera
+
+特斯拉行车记录仪桌面端（Mac、Windows）
+
+### 效果图
+<img src="https://github.com/Mario34/tesla-camera-app/blob/main/imgs/img_1.png" />
+<img src="https://github.com/Mario34/tesla-camera-app/blob/main/imgs/img_2.gif" />
+
+[安装包下载](https://github.com/Mario34/tesla-camera-app/releases)
 
 ### Flutter doctor
 
@@ -25,10 +33,10 @@
 [√] Connected device (3 available)
 ```
 
-### Package
+### 打包
 
 - Mac OS
-> Use `create-dmg`, script in `/shell/sh_dmg.sh`
+> 使用`create-dmg`，脚本位于 `/shell/sh_dmg.sh`
 
 - Windows
-> Use `InnoSetup`, [doc link](https://juejin.cn/post/7108928269285589000). Script in `/shell/TeslaCam.iss`
+> 使用`InnoSetup`，[参考文档](https://juejin.cn/post/7108928269285589000)，脚本位于 `/shell/TeslaCam.iss`
