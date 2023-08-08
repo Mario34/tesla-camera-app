@@ -78,6 +78,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
   void _listenerVideoChange() {
     _subscription = widget.videoBloc.stream.listen((event) async {
       _currentVideo = event.entity!;
+      _statusBloc.changeData(true);
       _setDataSource(_frontController, _currentVideo!.front);
       _setDataSource(_backController, _currentVideo!.back);
       _setDataSource(_leftController, _currentVideo!.left);
