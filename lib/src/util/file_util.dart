@@ -52,6 +52,11 @@ class FileUtil {
         getAllVideos(type, videos, f);
       } else {
         String fileName = getNameByPath(f.path);
+
+        ///过滤隐藏文件
+        if (fileName.startsWith('.')) {
+          continue;
+        }
         if (fileName.contains(Constants.thumb)) {
           continue;
         }
