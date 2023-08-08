@@ -2,11 +2,11 @@
 
 特斯拉行车记录仪桌面端（Mac、Windows）
 
+### [安装包下载](https://github.com/Mario34/tesla-camera-app/releases)
+
 ### 效果图
 <img src="https://github.com/Mario34/tesla-camera-app/blob/main/imgs/img_1.png" />
 <img src="https://github.com/Mario34/tesla-camera-app/blob/main/imgs/img_2.gif" />
-
-[安装包下载](https://github.com/Mario34/tesla-camera-app/releases)
 
 ### Flutter doctor
 
