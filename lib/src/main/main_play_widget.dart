@@ -445,7 +445,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     if (ObjectUtil.isEmpty(savePath)) {
       return;
     }
-    File output = File('$savePath/$fileName');
+    File output = File('$savePath${Platform.pathSeparator}$fileName');
 
     ///ffmpeg 文件位置
     final ffmpeg = Ffmpeg.instance.ffmpeg;
