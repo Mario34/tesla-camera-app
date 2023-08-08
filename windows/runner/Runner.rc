@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.mario" "\0"
-            VALUE "FileDescription", "tesla_camera" "\0"
+            VALUE "FileDescription", "TeslaCamera" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tesla_camera" "\0"
+            VALUE "InternalName", "TeslaCamera" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.mario. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tesla_camera.exe" "\0"
-            VALUE "ProductName", "tesla_camera" "\0"
+            VALUE "OriginalFilename", "TeslaCamera.exe" "\0"
+            VALUE "ProductName", "TeslaCamera" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
