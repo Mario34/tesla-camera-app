@@ -3,6 +3,9 @@
 ///
 /// @author azhon
 enum VideoType {
+  ///所有
+  all('all'),
+
   ///事件
   events('SavedClips'),
 
@@ -16,19 +19,4 @@ enum VideoType {
   final String name;
 
   const VideoType(this.name);
-}
-
-extension VideoTypeEx on VideoType {
-  static VideoType? byIndex(int index) {
-    switch (index) {
-      case 1:
-        return VideoType.events;
-      case 2:
-        return VideoType.sentinel;
-      case 3:
-        return VideoType.record;
-      default:
-        return null;
-    }
-  }
 }
