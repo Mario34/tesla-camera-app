@@ -409,8 +409,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
         child: DataChangeWidget<Duration>(
           bloc: _durationBloc,
           child: (_, state) {
-            final date = TimeUtil.formatTime(start + state!.inMilliseconds,
-                format: 'yyyy年MM月dd日 HH:mm:ss');
+            final date = TimeUtil.formatTime(start + state!.inMilliseconds);
             return Text(
               date,
               style: const TextStyle(
