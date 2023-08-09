@@ -3,7 +3,9 @@
 ///
 /// @author azhon
 import 'package:flutter/material.dart';
+import 'package:tesla_camera/generated/assets/tesla_camera_assets.dart';
 import 'package:tesla_camera/src/bloc/tab/tab_bloc.dart';
+import 'package:tesla_camera/src/entity/structure_entity.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:todo_flutter/todo_flutter.dart';
 
@@ -74,7 +76,7 @@ class _MainTabWidgetState extends State<MainTabWidget>
             ),
           ),
           Expanded(
-            child: DataChangeWidget<List<VideoEntity>?>(
+            child: DataChangeWidget<List<StructureEntity>?>(
               bloc: widget.tabBloc.listBloc,
               child: (_, state) {
                 if (ObjectUtil.isEmpty(state)) {
@@ -94,8 +96,7 @@ class _MainTabWidgetState extends State<MainTabWidget>
                     physics: const ClampingScrollPhysics(),
                     padding: EdgeInsets.zero,
                     itemBuilder: (_, index) {
-                      final item = state![index];
-                      return _buildItem(state, item);
+                      return _buildItem(state!, index);
                     },
                   );
                 }
@@ -107,61 +108,45 @@ class _MainTabWidgetState extends State<MainTabWidget>
     );
   }
 
-  Widget _buildItem(List<VideoEntity> list, VideoEntity item) {
-    return GestureDetector(
-      onTap: () {
-        for (var element in list) {
-          element.selected = false;
-        }
-        item.selected = !item.selected;
-        widget.tabBloc.listBloc.changeData([...list]);
-        widget.itemCallback?.call(item);
-      },
-      child: Container(
-        margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            item.selected
-                ? const Icon(
-                    Icons.radio_button_checked,
-                    color: Colors.blue,
-                  )
-                : const Icon(
-                    Icons.radio_button_unchecked,
-                    color: Colors.grey,
-                  ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Text(
-                TimeUtil.formatTime(item.time.millisecondsSinceEpoch,
-                    format: 'yyyy年MM月dd日 HH:mm:ss'),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: item.selected ? Colors.blue : const Color(0xFF333333),
-                ),
-              ),
-            ),
-            const Spacer(),
-            Visibility(
-              visible: item.event,
-              child: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _buildItem(List<StructureEntity> list, int index) {
+    final item = list[index];
+    return ExpansionTile(
+      leading: Image.asset(TeslaCameraAssets.finder, width: 24),
+      title: Text(item.date),
+      textColor: Colors.blue,
+      collapsedTextColor: const Color(0xFF333333),
+      collapsedBackgroundColor: Colors.white,
+      collapsedShape: const Border(
+        bottom: BorderSide(color: Color(0x4D666666)),
       ),
+      children: item.list.map((e) {
+        return ListTile(
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -4),
+          minVerticalPadding: 0,
+          title: Container(
+            margin: const EdgeInsets.only(left: 60),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              TimeUtil.formatTime(e.time.millisecondsSinceEpoch),
+              style: TextStyle(
+                fontSize: 16,
+                color: e.selected ? Colors.blue : const Color(0xFF333333),
+              ),
+            ),
+          ),
+          onTap: () {
+            for (var e1 in list) {
+              for (var e2 in e1.list) {
+                e2.selected = false;
+              }
+            }
+            e.selected = !e.selected;
+            widget.tabBloc.listBloc.changeData([...list]);
+            widget.itemCallback?.call(e);
+          },
+        );
+      }).toList(),
     );
   }
 }

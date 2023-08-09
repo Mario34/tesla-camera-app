@@ -1,11 +1,11 @@
 part of 'tab_bloc.dart';
 
 abstract class TabState {
-  final List<VideoEntity>? list;
+  final List<StructureEntity>? list;
 
   TabState(this.list);
 
-  List<VideoEntity>? listByType(VideoType? type) {
+  List<StructureEntity>? listByType(VideoType? type) {
     if (type == null) {
       return list;
     }

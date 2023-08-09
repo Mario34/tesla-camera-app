@@ -15,6 +15,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:process_run/process_run.dart';
 import 'package:tesla_camera/generated/assets/tesla_camera_assets.dart';
 import 'package:tesla_camera/src/bloc/video/video_bloc.dart';
+import 'package:tesla_camera/src/entity/structure_entity.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:tesla_camera/src/ffmpeg/base_ffmpeg.dart';
 import 'package:tesla_camera/src/util/file_util.dart';
@@ -23,7 +24,7 @@ import 'package:todo_flutter/todo_flutter.dart';
 
 class MainPlayWidget extends StatefulWidget {
   final VideoBloc videoBloc;
-  final ValueChanged<List<VideoEntity>>? selectCallBack;
+  final ValueChanged<List<StructureEntity>>? selectCallBack;
 
   const MainPlayWidget({
     Key? key,

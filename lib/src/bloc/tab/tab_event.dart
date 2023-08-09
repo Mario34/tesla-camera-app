@@ -5,7 +5,7 @@ abstract class TabEvent extends BaseEvent<TabBloc, TabState> {
 }
 
 class UpdateListEvent extends TabEvent {
-  final List<VideoEntity> list;
+  final List<StructureEntity> list;
 
   UpdateListEvent(this.list);
 

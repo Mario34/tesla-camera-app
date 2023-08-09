@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:tesla_camera/src/entity/structure_entity.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:tesla_camera/src/util/constants.dart';
 import 'package:tesla_camera/src/util/video_direction.dart';
 import 'package:tesla_camera/src/util/video_type.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_flutter/todo_flutter.dart';
 
 /// createTime: 2023/7/4 on 15:41
 /// desc:
@@ -13,16 +15,23 @@ import 'package:intl/intl.dart';
 /// @author azhon
 class FileUtil {
   ///获取所有文件
-  static Future<List<VideoEntity>> getAllFiles(String root) async {
+  static Future<List<StructureEntity>> getAllFiles(String root) async {
     List<VideoEntity> all = [];
     all.addAll(await _getFiles(root, VideoType.events));
     all.addAll(await _getFiles(root, VideoType.sentinel));
     all.addAll(await _getFiles(root, VideoType.record));
-    all.sort((a, b) {
-      return b.time.millisecondsSinceEpoch
-          .compareTo(a.time.millisecondsSinceEpoch);
-    });
-    return all;
+
+    ///按天合并
+    Map<String, StructureEntity> daysMap = {};
+    for (var v in all) {
+      String key = TimeUtil.formatTime(
+        v.time.millisecondsSinceEpoch,
+        format: 'yyyy年MM月dd日',
+      );
+      daysMap[key] = daysMap[key] ?? StructureEntity(type: v.type, date: key);
+      daysMap[key]!.list.add(v);
+    }
+    return daysMap.values.toList();
   }
 
   ///获取目录下不同类型的文件

@@ -2,4 +2,5 @@
 class TeslaCameraAssets {
   static const dir = 'assets/images/dir.png';
   static const export = 'assets/images/export.png';
+  static const finder = 'assets/images/finder.png';
 }
