@@ -31,7 +31,15 @@ class FileUtil {
       daysMap[key] = daysMap[key] ?? StructureEntity(type: v.type, date: key);
       daysMap[key]!.list.add(v);
     }
-    return daysMap.values.toList();
+    final list = daysMap.values.toList();
+
+    ///排序
+    list.sort((a, b) => b.date.compareTo(a.date));
+    for (var value in list) {
+      value.list.sort((a, b) => b.time.millisecondsSinceEpoch
+          .compareTo(a.time.millisecondsSinceEpoch));
+    }
+    return list;
   }
 
   ///获取目录下不同类型的文件
