@@ -1,6 +1,7 @@
 # Tesla Camera
 
-特斯拉行车记录仪桌面端（Mac、Windows）
+特斯拉行车记录仪添加时间水印桌面端（Mac、Windows）
+- 使用方式：点击界面文件夹图标，然后选择`TeslaCam`文件夹导入
 
 ### [安装包下载](https://github.com/Mario34/tesla-camera-app/releases)
 
