@@ -2,11 +2,15 @@
 /// desc:
 ///
 /// @author azhon
+import 'dart:io';
+
+import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:tesla_camera/generated/assets/tesla_camera_assets.dart';
 import 'package:tesla_camera/src/bloc/tab/tab_bloc.dart';
 import 'package:tesla_camera/src/entity/structure_entity.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
+import 'package:tesla_camera/src/util/file_util.dart';
 import 'package:todo_flutter/todo_flutter.dart';
 
 class TabViewWidget extends StatefulWidget {
@@ -75,12 +79,19 @@ class _TabViewWidgetState extends State<TabViewWidget>
           title: Container(
             margin: const EdgeInsets.only(left: 60),
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              TimeUtil.formatTime(e.time.millisecondsSinceEpoch),
-              style: TextStyle(
-                fontSize: 16,
-                color: e.selected ? Colors.blue : const Color(0xFF333333),
-              ),
+            child: Row(
+              children: [
+                ThumbnailWidget(entity: e),
+                const SizedBox(width: 10),
+                Text(
+                  TimeUtil.HHmmss(e.time.millisecondsSinceEpoch),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: e.selected ? Colors.blue : const Color(0xFF333333),
+                  ),
+                ),
+              ],
             ),
           ),
           onTap: () {
@@ -100,4 +111,57 @@ class _TabViewWidgetState extends State<TabViewWidget>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class ThumbnailWidget extends StatefulWidget {
+  final VideoEntity entity;
+
+  const ThumbnailWidget({
+    Key? key,
+    required this.entity,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ThumbnailWidgetState();
+}
+
+class _ThumbnailWidgetState extends State<ThumbnailWidget> {
+  final plugin = FcNativeVideoThumbnail();
+  String? thumbnailPath;
+
+  @override
+  void initState() {
+    super.initState();
+    FileUtil.cacheDir().then((path) async {
+      thumbnailPath =
+          '$path${Platform.pathSeparator}${FileUtil.getNameByPath(widget.entity.front!)}';
+      await plugin.getVideoThumbnail(
+        srcFile: widget.entity.front!,
+        destFile: thumbnailPath!,
+        width: 200,
+        height: 200,
+        keepAspectRatio: true,
+      );
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (thumbnailPath == null) {
+      return Transform.scale(
+        scale: 0.7,
+        child: const CircularProgressIndicator(),
+      );
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.file(
+        File(thumbnailPath!),
+        width: 60,
+        height: 45,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:tesla_camera/src/entity/structure_entity.dart';
 import 'package:tesla_camera/src/entity/video_entity.dart';
 import 'package:tesla_camera/src/util/constants.dart';
@@ -115,5 +116,18 @@ class FileUtil {
 
   static String getNameByPath(String path) {
     return path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
+  }
+
+  ///创建缓存目录
+  static Future<String> cacheDir({bool delete = false}) async {
+    final support = await getApplicationSupportDirectory();
+    final dir = Directory('${support.path}${Platform.pathSeparator}cache');
+    if (!dir.existsSync()) {
+      dir.create();
+    }
+    if (delete) {
+      dir.listSync().forEach((element) => element.deleteSync());
+    }
+    return dir.path;
   }
 }
