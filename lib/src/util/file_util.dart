@@ -64,24 +64,26 @@ class FileUtil {
     Directory root,
   ) {
     List<FileSystemEntity> files = root.listSync();
+
+    ///找事件json文件
     DateTime? eventTime;
+    final list =
+        files.where((f) => f.path.contains(Constants.eventJson)).toList();
+    if (list.isNotEmpty) {
+      ///事件发生的时间
+      final json = File(list.first.path).readAsStringSync();
+      eventTime = DateTime.parse(jsonDecode(json)['timestamp']);
+    }
     for (var f in files) {
       if (f is Directory) {
         getAllVideos(type, videos, f);
       } else {
         String fileName = getNameByPath(f.path);
 
-        ///过滤隐藏文件
-        if (fileName.startsWith('.')) {
-          continue;
-        }
-        if (fileName.contains(Constants.thumb)) {
-          continue;
-        }
-        if (fileName.contains(Constants.eventJson)) {
-          ///事件发生的时间
-          final json = File(f.path).readAsStringSync();
-          eventTime = DateTime.parse(jsonDecode(json)['timestamp']);
+        ///过滤隐藏、不需要处理的文件
+        if (fileName.startsWith('.') ||
+            fileName.contains(Constants.thumb) ||
+            fileName.contains(Constants.eventJson)) {
           continue;
         }
 
@@ -104,12 +106,14 @@ class FileUtil {
         }
 
         ///判断是不是发生事件了
-        // if (eventTime != null) {
-        //   if (eventTime.isAtSameMomentAs(curr.time) ||
-        //       eventTime.isAfter(curr.time)) {
-        //     curr.event = true;
-        //   }
-        // }
+        if (eventTime != null) {
+          ///应该获取当前视频的时长
+          final videoEnd = curr.time.add(const Duration(minutes: 1));
+          if (eventTime.isAtSameMomentAs(curr.time) ||
+              (eventTime.isAfter(curr.time) && eventTime.isBefore(videoEnd))) {
+            curr.event = true;
+          }
+        }
       }
     }
   }

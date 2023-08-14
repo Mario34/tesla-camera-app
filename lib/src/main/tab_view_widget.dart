@@ -64,7 +64,17 @@ class _TabViewWidgetState extends State<TabViewWidget>
     final item = list[index];
     return ExpansionTile(
       leading: Image.asset(TeslaCameraAssets.finder, width: 24),
-      title: Text(item.date),
+      title: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(item.date),
+          ),
+          Expanded(
+            child: _dangerWidget(item.event),
+          ),
+        ],
+      ),
       textColor: Colors.blue,
       collapsedTextColor: const Color(0xFF333333),
       collapsedBackgroundColor: Colors.white,
@@ -91,6 +101,8 @@ class _TabViewWidgetState extends State<TabViewWidget>
                     color: e.selected ? Colors.blue : const Color(0xFF333333),
                   ),
                 ),
+                const SizedBox(width: 20),
+                _dangerWidget(e.event),
               ],
             ),
           ),
@@ -111,6 +123,24 @@ class _TabViewWidgetState extends State<TabViewWidget>
 
   @override
   bool get wantKeepAlive => true;
+
+  Widget _dangerWidget(bool danger) {
+    return Visibility(
+      visible: danger,
+      child: Row(
+        children: [
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class ThumbnailWidget extends StatefulWidget {

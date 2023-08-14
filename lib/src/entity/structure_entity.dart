@@ -14,4 +14,6 @@ class StructureEntity {
     required this.type,
     required this.date,
   });
+
+  bool get event => list.where((element) => element.event).isNotEmpty;
 }
