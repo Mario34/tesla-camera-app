@@ -160,7 +160,6 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
                           direction: VideoDirection.right,
                         ),
                         _timestampWidget(),
-                        _pauseWidget(),
                       ],
                     ),
                   )
@@ -372,22 +371,45 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     }
     return Container(
       height: 60,
-      margin: const EdgeInsets.only(top: 16, left: 40, right: 40),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.topCenter,
-      child: DataChangeWidget<Duration>(
-        bloc: _totalDurationBloc,
-        child: (_, total) {
-          return DataChangeWidget<Duration>(
-            bloc: _durationBloc,
-            child: (_, progress) {
-              return ProgressBar(
-                progress: progress ?? Duration.zero,
-                total: total ?? Duration.zero,
-                onSeek: (duration) => _changeProgress(duration),
-              );
-            },
-          );
-        },
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => _togglePlay(),
+            child: DataChangeWidget<bool>(
+              bloc: _statusBloc,
+              child: (_, state) {
+                return Center(
+                  child: Icon(
+                    state! ? Icons.pause_outlined : Icons.play_arrow,
+                    color: Colors.blue,
+                    size: 24,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: DataChangeWidget<Duration>(
+              bloc: _totalDurationBloc,
+              child: (_, total) {
+                return DataChangeWidget<Duration>(
+                  bloc: _durationBloc,
+                  child: (_, progress) {
+                    return ProgressBar(
+                      progress: progress ?? Duration.zero,
+                      total: total ?? Duration.zero,
+                      timeLabelLocation: TimeLabelLocation.sides,
+                      onSeek: (duration) => _changeProgress(duration),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -420,23 +442,6 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _pauseWidget() {
-    return DataChangeWidget<bool>(
-      bloc: _statusBloc,
-      child: (_, state) {
-        return state!
-            ? const SizedBox()
-            : const Center(
-                child: Icon(
-                  Icons.play_circle_outlined,
-                  color: Colors.white,
-                  size: 60,
-                ),
-              );
-      },
     );
   }
 
