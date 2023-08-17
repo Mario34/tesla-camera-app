@@ -112,6 +112,7 @@ Source: "D:\tesla_camera\build\windows\runner\Release\vcruntime140d.dll"; DestDi
 Source: "D:\tesla_camera\build\windows\runner\Release\vk_swiftshader.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\tesla_camera\build\windows\runner\Release\vulkan-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\tesla_camera\build\windows\runner\Release\zlib.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\tesla_camera\build\windows\runner\Release\fc_native_video_thumbnail_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\tesla_camera\build\windows\runner\Release\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
