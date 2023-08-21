@@ -492,7 +492,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
     ///ffmpeg 文件位置
     final ffmpeg = Ffmpeg.instance.ffmpeg;
 
-    const offset = Offset(460, 30);
+    const offset = Offset(420, 30);
     int fontSize = 30;
     String fontColor = 'white';
 
@@ -504,7 +504,7 @@ class _MainPlayWidgetState extends State<MainPlayWidget> {
       '-i',
       input,
       '-vf',
-      '"drawtext=fontfile=${await ffmpeg.ttf()}:fontsize=$fontSize:fontcolor=$fontColor:x=${offset.dx}:y=${offset.dy}:text=\'%{pts\\:localtime\\:$startTime}\'"',
+      '"drawtext=fontfile=${await ffmpeg.ttf()}:fontsize=$fontSize:fontcolor=$fontColor:x=${offset.dx}:y=${offset.dy}:text=\'%{pts\\:localtime\\:$startTime\\:%Y年%m月%d日 %H时%M分%S秒}\'"',
       output.path,
     ];
     _togglePlay(pause: true);
